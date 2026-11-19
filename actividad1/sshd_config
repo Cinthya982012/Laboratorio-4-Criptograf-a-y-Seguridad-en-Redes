@@ -1,0 +1,38 @@
+
+# Puerto del servidor SSH
+Port 22
+
+# Direccion de escucha
+AddressFamily any
+ListenAddress 0.0.0.0
+
+# Clave de identidad del servidor
+HostKey /etc/ssh/ssh_host_ed25519_key
+
+# Intercambio de claves
+KexAlgorithms curve25519-sha256
+
+# Cifrado simetrico
+Ciphers aes256-ctr
+
+# Integridad de los mensajes
+MACs hmac-sha2-256
+
+# Algoritmo de clave publica del servidor
+HostKeyAlgorithms ssh-ed25519
+
+# Autenticacion
+PermitRootLogin no
+PasswordAuthentication yes
+PubkeyAuthentication yes
+KbdInteractiveAuthentication no
+UsePAM yes
+
+# Usuario permitido
+AllowUsers labuser
+
+# Limitar intentos de autenticacion
+MaxAuthTries 3
+
+# Mantener registro de conexiones
+LogLevel VERBOSE
