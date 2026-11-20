@@ -1,38 +1,50 @@
-
-# Puerto del servidor SSH
+# Puerto donde escuchara el servidor SSH
 Port 22
 
-# Direccion de escucha
+# Permitir el uso de IPv4 e IPv6
+# Escuchar conexiones desde todas las interfaces IPv4
 AddressFamily any
 ListenAddress 0.0.0.0
 
-# Clave de identidad del servidor
+# Ruta de la clave privada de identidad del servidor
+# Se utiliza Ed25519 para identificar al servidor
 HostKey /etc/ssh/ssh_host_ed25519_key
 
-# Intercambio de claves
+# Algoritmo utilizado para el intercambio de claves
+# Curve25519 permite establecer una clave compartida segura
 KexAlgorithms curve25519-sha256
 
-# Cifrado simetrico
+# Algoritmo de cifrado simetrico utilizado en la conexion
+# AES con clave de 256 bits en modo CTR
 Ciphers aes256-ctr
 
-# Integridad de los mensajes
+# Algoritmo utilizado para verificar la integridad de los mensajes
 MACs hmac-sha2-256
 
-# Algoritmo de clave publica del servidor
+# Algoritmo de clave publica utilizado para identificar al servidor
 HostKeyAlgorithms ssh-ed25519
 
 # Autenticacion
+# Deshabilitar el acceso directo de root por SSH
 PermitRootLogin no
+
+# Permitir autenticacion mediante contraseña
 PasswordAuthentication yes
+
+# Permitir autenticacion mediante clave publica
 PubkeyAuthentication yes
+
+# Deshabilitar autenticacion interactiva por teclado
 KbdInteractiveAuthentication no
+
+# Habilitar PAM para la gestion de autenticacion del sistema
 UsePAM yes
 
-# Usuario permitido
+# Permitir conexiones solamente al usuario labuser
 AllowUsers labuser
 
-# Limitar intentos de autenticacion
+# Limitar la cantidad de intentos de autenticacion fallidos
 MaxAuthTries 3
 
-# Mantener registro de conexiones
+# Registrar informacion detallada sobre las conexiones SSH
 LogLevel VERBOSE
