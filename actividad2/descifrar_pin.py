@@ -2,29 +2,33 @@ from pathlib import Path
 from cryptography.hazmat.primitives import serialization, hashes
 from cryptography.hazmat.primitives.asymmetric import padding
 
-# Leer flujo TCP reconstruido
+# Leer el flujo TCP reconstruido que contiene los datos capturados
 datos = Path("flujo_tcp.bin").read_bytes()
 
-# Buscar bloque RSA_PIN
+# Buscar la etiqueta RSA_PIN dentro del flujo para localizar el bloque
 offset = datos.find(b"RSA_PIN")
 
+# Verificar si se encontro el bloque RSA_PIN
 if offset == -1:
     raise ValueError("No se encontró RSA_PIN")
 
+# Extraer el bloque de datos a partir de la posicion encontrada
 bloque = datos[offset:offset + 280]
 
-# Separar salt y PIN cifrado
+# Separar el salt y el PIN cifrado del bloque RSA_PIN
+# El salt ocupa 16 bytes y el PIN cifrado se encuentra a continuacion
 salt = bloque[8:24]
 pin_cifrado = bloque[24:280]
 
-# Cargar clave privada RSA
+# Cargar la clave privada RSA desde el archivo PEM
 with open("clave_privada.pem", "rb") as archivo:
     clave_privada = serialization.load_pem_private_key(
         archivo.read(),
         password=None
     )
 
-# Descifrar mediante RSA-OAEP con SHA-256
+# Descifrar el PIN utilizando RSA-OAEP con SHA-256
+# Se utiliza SHA-256 tanto para el algoritmo principal como para MGF1
 pin_descifrado = clave_privada.decrypt(
     pin_cifrado,
     padding.OAEP(
@@ -34,7 +38,7 @@ pin_descifrado = clave_privada.decrypt(
     )
 )
 
-# Mostrar resultado
+# Mostrar los resultados del proceso de descifrado
 print("=== DESCIFRADO RSA ===")
 print("Descifrado realizado correctamente")
 print("Salt:", salt.hex())
