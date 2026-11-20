@@ -47,7 +47,7 @@ Los scripts de Python desarrollados para esta segunda actividad deben ejecutarse
 ##### 9. Visualización de transacciones recuperadas
 `python mostrar_transacciones.py`
 
-## 🛠️ Tecnologías utilizadas
+## Tecnologías utilizadas
 
 - Python 3
 - Docker
